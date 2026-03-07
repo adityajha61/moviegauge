@@ -1,7 +1,7 @@
 class MoviesController < ApplicationController
   before_action :authenticate_user!, only: [ :new, :create, :edit, :update, :destroy ]
   before_action :set_movie, only: [ :edit, :update, :show, :destroy ]
-  
+
   def index
     if user_signed_in?
       # Show only movies that the current user has rated or interacted with
