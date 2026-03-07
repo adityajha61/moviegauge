@@ -9,7 +9,7 @@
           <div class="card-body">
             <h5 class="card-title"><%= movie.title %></h5>
             <p class="card-text"><%= truncate(movie.description, length: 100) %></p>
-            <p class="text-muted">Released: <%= movie.release_date.year %></p>
+            <p class="text-muted">Released: <%= movie.release_date&.year || "Unknown" %></p>
             <p>Average Rating: <%= movie.ratings.average(:score)&.round(1) || "Not rated" %></p>
             <%= link_to 'View Details', movie_path(movie), class: 'btn btn-outline-primary' %>
           </div>

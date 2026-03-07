@@ -12,6 +12,15 @@ class MoviesController < ApplicationController
     @movie = Movie.new
   end
 
+  def create
+    @movie = Movie.new(movie_params)
+    if @movie.save
+      redirect_to @movie, notice: "Movie was successfully added."
+    else
+      render :new
+    end
+  end
+
   def edit
   end
 
@@ -37,5 +46,4 @@ class MoviesController < ApplicationController
   def movie_params
     params.require(:movie).permit(:title, :description, :release_date)
   end
-
 end
