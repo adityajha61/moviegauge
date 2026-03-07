@@ -1,4 +1,53 @@
-<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);">
+<style>
+  .auth-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--light-bg) 0%, #F1F5F9 100%);
+  }
+
+  [data-theme="dark"] .auth-shell {
+    background: linear-gradient(135deg, #020617 0%, #0F172A 100%);
+  }
+
+  [data-theme="dark"] .auth-shell .card-body {
+    background: #111827;
+    color: #E2E8F0;
+  }
+
+  [data-theme="dark"] .auth-shell .form-label,
+  [data-theme="dark"] .auth-shell .form-check-label {
+    color: #E2E8F0;
+  }
+
+  [data-theme="dark"] .auth-shell .form-control {
+    background: #0F172A !important;
+    color: #E2E8F0 !important;
+    border-color: #334155 !important;
+  }
+
+  [data-theme="dark"] .auth-shell .form-control::placeholder {
+    color: #94A3B8;
+  }
+
+  [data-theme="dark"] .auth-shell .auth-muted,
+  [data-theme="dark"] .auth-shell .auth-back-link,
+  [data-theme="dark"] .auth-shell .auth-divider-text {
+    color: #94A3B8 !important;
+  }
+
+  [data-theme="dark"] .auth-shell .auth-divider-line {
+    background: #334155 !important;
+  }
+
+  [data-theme="dark"] .auth-shell .auth-link,
+  [data-theme="dark"] .auth-shell #togglePassword {
+    color: #A78BFA !important;
+  }
+</style>
+
+<div class="auth-shell">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-5">
@@ -49,20 +98,20 @@
               </div>
 
               <!-- Divider -->
-              <div style="display: flex; align-items: center; margin: 2rem 0; gap: 1rem;">
-                <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
-                <span style="color: #94A3B8; font-size: 0.9rem;">or</span>
-                <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+                <div style="display: flex; align-items: center; margin: 2rem 0; gap: 1rem;">
+                <div class="auth-divider-line" style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+                <span class="auth-divider-text" style="color: #94A3B8; font-size: 0.9rem;">or</span>
+                <div class="auth-divider-line" style="flex: 1; height: 1px; background: #E2E8F0;"></div>
               </div>
 
               <!-- Links -->
               <div class="text-center" style="font-size: 0.95rem;">
-                <p style="color: #64748B; margin-bottom: 1rem;">
+                <p class="auth-muted" style="color: #64748B; margin-bottom: 1rem;">
                   Don't have an account?
-                  <%= link_to "Sign up now", new_user_registration_path, style: "color: #8B5CF6; font-weight: 600; text-decoration: none;" %>
+                  <%= link_to "Sign up now", new_user_registration_path, class: "auth-link", style: "color: #8B5CF6; font-weight: 600; text-decoration: none;" %>
                 </p>
-                <p style="color: #64748B;">
-                  <%= link_to "Forgot your password?", new_user_password_path, style: "color: #8B5CF6; font-weight: 600; text-decoration: none;" %>
+                <p class="auth-muted" style="color: #64748B;">
+                  <%= link_to "Forgot your password?", new_user_password_path, class: "auth-link", style: "color: #8B5CF6; font-weight: 600; text-decoration: none;" %>
                 </p>
               </div>
             <% end %>
@@ -71,7 +120,7 @@
 
         <!-- Back Link -->
         <div style="text-align: center; margin-top: 2rem;">
-          <%= link_to "← Back to MovieGauge", root_path, style: "color: #64748B; text-decoration: none; font-weight: 500; transition: color 0.3s;" %>
+          <%= link_to "← Back to MovieGauge", root_path, class: "auth-back-link", style: "color: #64748B; text-decoration: none; font-weight: 500; transition: color 0.3s;" %>
         </div>
       </div>
     </div>

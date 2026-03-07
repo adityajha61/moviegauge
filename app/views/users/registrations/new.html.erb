@@ -1,4 +1,54 @@
-<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);">
+<style>
+  .auth-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--light-bg) 0%, #F1F5F9 100%);
+  }
+
+  [data-theme="dark"] .auth-shell {
+    background: linear-gradient(135deg, #020617 0%, #0F172A 100%);
+  }
+
+  [data-theme="dark"] .auth-shell .card-body {
+    background: #111827;
+    color: #E2E8F0;
+  }
+
+  [data-theme="dark"] .auth-shell .form-label {
+    color: #E2E8F0;
+  }
+
+  [data-theme="dark"] .auth-shell .form-control {
+    background: #0F172A !important;
+    color: #E2E8F0 !important;
+    border-color: #334155 !important;
+  }
+
+  [data-theme="dark"] .auth-shell .form-control::placeholder {
+    color: #94A3B8;
+  }
+
+  [data-theme="dark"] .auth-shell .auth-muted,
+  [data-theme="dark"] .auth-shell .auth-back-link,
+  [data-theme="dark"] .auth-shell .auth-divider-text,
+  [data-theme="dark"] .auth-shell .auth-password-hint {
+    color: #94A3B8 !important;
+  }
+
+  [data-theme="dark"] .auth-shell .auth-divider-line {
+    background: #334155 !important;
+  }
+
+  [data-theme="dark"] .auth-shell .auth-link,
+  [data-theme="dark"] .auth-shell #togglePassword1,
+  [data-theme="dark"] .auth-shell #togglePassword2 {
+    color: #A78BFA !important;
+  }
+</style>
+
+<div class="auth-shell">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-5">
@@ -30,7 +80,7 @@
               <div class="mb-4">
                 <%= form.label :password, "Password", class: "form-label fw-bold" %>
                 <% if @minimum_password_length %>
-                  <small style="display: block; color: #64748B; margin-bottom: 0.5rem;">
+                  <small class="auth-password-hint" style="display: block; color: #64748B; margin-bottom: 0.5rem;">
                     Minimum <%= @minimum_password_length %> characters required
                   </small>
                 <% end %>
@@ -60,16 +110,16 @@
 
               <!-- Divider -->
               <div style="display: flex; align-items: center; margin: 2rem 0; gap: 1rem;">
-                <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
-                <span style="color: #94A3B8; font-size: 0.9rem;">or</span>
-                <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+                <div class="auth-divider-line" style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+                <span class="auth-divider-text" style="color: #94A3B8; font-size: 0.9rem;">or</span>
+                <div class="auth-divider-line" style="flex: 1; height: 1px; background: #E2E8F0;"></div>
               </div>
 
               <!-- Links -->
-              <div class="text-center" style="font-size: 0.95rem; color: #64748B;">
+              <div class="text-center auth-muted" style="font-size: 0.95rem; color: #64748B;">
                 <p style="margin-bottom: 0;">
                   Already have an account?
-                  <%= link_to "Sign in here", new_user_session_path, style: "color: #8B5CF6; font-weight: 600; text-decoration: none;" %>
+                  <%= link_to "Sign in here", new_user_session_path, class: "auth-link", style: "color: #8B5CF6; font-weight: 600; text-decoration: none;" %>
                 </p>
               </div>
             <% end %>
@@ -78,7 +128,7 @@
 
         <!-- Back Link -->
         <div style="text-align: center; margin-top: 2rem;">
-          <%= link_to "← Back to MovieGauge", root_path, style: "color: #64748B; text-decoration: none; font-weight: 500; transition: color 0.3s;" %>
+          <%= link_to "← Back to MovieGauge", root_path, class: "auth-back-link", style: "color: #64748B; text-decoration: none; font-weight: 500; transition: color 0.3s;" %>
         </div>
       </div>
     </div>
