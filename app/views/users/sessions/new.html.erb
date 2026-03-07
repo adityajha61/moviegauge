@@ -5,7 +5,13 @@
         <div class="card border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
           <!-- Header -->
           <div style="background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); padding: 3rem 1.5rem; text-align: center; color: white;">
-            <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">🎬 MovieGauge</h1>
+            <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; display: inline-flex; align-items: center; gap: 0.65rem;">
+              <picture>
+                <source srcset="/icon.svg" type="image/svg+xml">
+                <img src="/icon.png" alt="MovieGauge logo" width="44" height="44" style="border-radius: 10px; object-fit: cover; background: rgba(255, 255, 255, 0.2);">
+              </picture>
+              <span>MovieGauge</span>
+            </h1>
             <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 0;">Welcome back, cinephile!</p>
           </div>
 
@@ -21,7 +27,12 @@
               <!-- Password -->
               <div class="mb-4">
                 <%= form.label :password, "Password", class: "form-label fw-bold" %>
-                <%= form.password_field :password, autocomplete: "current-password", class: "form-control form-control-lg", placeholder: "••••••••", style: "border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem;" %>
+                <div class="input-group" style="position: relative;">
+                  <%= form.password_field :password, autocomplete: "current-password", id: "login_password", class: "form-control form-control-lg", placeholder: "••••••••", style: "border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem; padding-right: 2.75rem;" %>
+                  <button type="button" id="togglePassword" class="btn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #64748B; cursor: pointer; padding: 0.35rem 0.5rem; font-size: 0.8rem; font-weight: 700;" onclick="togglePasswordVisibility('login_password', 'togglePassword')">
+                    Show
+                  </button>
+                </div>
               </div>
 
               <!-- Remember Me -->
@@ -66,3 +77,18 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  function togglePasswordVisibility(fieldId, buttonId) {
+    const field = document.getElementById(fieldId);
+    const button = document.getElementById(buttonId);
+    
+    if (field.type === 'password') {
+      field.type = 'text';
+      button.textContent = 'Hide';
+    } else {
+      field.type = 'password';
+      button.textContent = 'Show';
+    }
+  }
+</script>

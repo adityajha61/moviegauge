@@ -43,7 +43,8 @@ class MoviesController < ApplicationController
           @movie.ratings.create(user: current_user, score: rating_score)
         end
       end
-      redirect_to @movie, notice: "✅ Movie added to your collection!"
+      # Keep user on movie detail page so they can immediately review, edit, or rate.
+      redirect_to movie_path(@movie), notice: "✅ Movie added to your collection!"
     else
       render :new
     end

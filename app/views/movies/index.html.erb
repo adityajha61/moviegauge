@@ -14,10 +14,7 @@
     <!-- Search Bar -->
     <div style="margin-bottom: 2rem;">
       <div class="search-box-wrapper" style="position: relative;">
-        <input type="text" id="collection-search" placeholder="🔍 Search your collection..." class="form-control" style="display: none;">
-        <span id="search-toggle-btn" class="btn btn-light" style="width: 100%; text-align: left; cursor: pointer; border: 2px solid #E2E8F0; padding: 0.75rem 1.25rem; transition: all 0.3s ease;">
-          🔍 Search your collection...
-        </span>
+        <input type="text" id="collection-search" placeholder="🔍 Search your collection..." class="form-control" style="border-radius: 8px; border: 2px solid #E2E8F0; padding: 0.75rem 1.25rem;">
       </div>
     </div>
 
@@ -37,9 +34,9 @@
             <div class="card movie-card h-100" style="border: none; border-radius: 12px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
               <%= link_to movie_path(movie), style: "text-decoration: none; color: inherit;" do %>
                 <!-- Movie Poster -->
-                <div class="card-img-wrapper position-relative" style="height: 300px; overflow: hidden; background: linear-gradient(135deg, #F0F4F8 0%, #E2E8F0 100%);">
+                <div class="card-img-wrapper position-relative" style="height: 280px; overflow: hidden; background: linear-gradient(135deg, #F0F4F8 0%, #E2E8F0 100%);">
                   <% if movie.poster_path.present? %>
-                    <img src="<%= movie.poster_url %>" class="card-img-top" alt="<%= movie.title %>" style="height: 100%; width: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                    <img src="<%= movie.poster_url %>" class="card-img-top" alt="<%= movie.title %>" style="height: 100%; width: 100%; object-fit: cover; transition: transform 0.3s ease; object-position: center;">
                   <% else %>
                     <div class="d-flex align-items-center justify-content-center h-100">
                       <span style="font-size: 3rem; opacity: 0.5;">📽️</span>
@@ -116,45 +113,50 @@
     #collection-search {
       width: 100%;
       padding: 0.75rem 1.25rem;
-      border: 2px solid #E2E8F0;
+      border: 2px solid #E2E8F0 !important;
       border-radius: 8px;
       font-size: 1rem;
       transition: all 0.3s ease;
+      display: block !important;
     }
 
     #collection-search:focus {
       outline: none;
-      border-color: #8B5CF6;
+      border-color: #8B5CF6 !important;
       box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
     }
+
   </style>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchToggle = document.getElementById('search-toggle-btn');
+    function initializeSearch() {
       const searchInput = document.getElementById('collection-search');
       const movieItems = document.querySelectorAll('.movie-item');
 
-      // Toggle search input visibility
-      searchToggle.addEventListener('click', function() {
-        searchInput.style.display = searchInput.style.display === 'none' ? 'block' : 'none';
-        if (searchInput.style.display === 'block') {
-          searchInput.focus();
-        } else {
-          searchInput.value = '';
-          movieItems.forEach(item => item.style.display = '');
-        }
-      });
+      if (!searchInput || movieItems.length === 0) {
+        return;
+      }
+
+      if (searchInput.dataset.searchBound === 'true') {
+        return;
+      }
+      searchInput.dataset.searchBound = 'true';
 
       // Search functionality
       searchInput.addEventListener('input', function() {
         const query = this.value.toLowerCase();
         movieItems.forEach(item => {
-          const title = item.querySelector('.card-title').textContent.toLowerCase();
-          item.style.display = title.includes(query) ? '' : 'none';
+          const titleElement = item.querySelector('.card-title');
+          if (titleElement) {
+            const title = titleElement.textContent.toLowerCase();
+            const shouldShow = title.includes(query);
+            item.style.display = shouldShow ? '' : 'none';
+          }
         });
       });
-    });
+    }
+
+    document.addEventListener('turbo:load', initializeSearch);
   </script>
 
 <% else %>
@@ -189,6 +191,21 @@
       font-weight: 800;
       margin-bottom: 1rem;
       text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .landing-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .landing-brand-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .landing-subtitle {
@@ -340,7 +357,13 @@
   <div class="landing-hero">
     <div class="container landing-content">
       <div style="max-width: 600px;">
-        <h1 class="landing-title">🎬 MovieGauge</h1>
+        <h1 class="landing-title landing-brand">
+          <picture>
+            <source srcset="/icon.svg" type="image/svg+xml">
+            <img src="/icon.png" alt="MovieGauge logo" class="landing-brand-logo" width="56" height="56">
+          </picture>
+          <span>MovieGauge</span>
+        </h1>
         <p class="landing-subtitle">Discover movies, rate them, and see what the community thinks. Your personal film guide awaits.</p>
         <div class="auth-buttons">
           <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-light btn-lg', style: 'font-weight: 600; color: #8B5CF6;' %>

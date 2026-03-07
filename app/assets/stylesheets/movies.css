@@ -31,6 +31,8 @@ p {
 /* Container */
 .container {
   max-width: 1200px;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 /* Cards - Premium Design */
@@ -204,7 +206,7 @@ p {
   padding: 0.75rem 1rem;
   font-size: 1rem;
   transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Manrope', sans-serif;
 }
 
 .form-control:focus, .form-select:focus {
@@ -311,9 +313,14 @@ p {
 /* Movie Show Page */
 .movie-details {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
   gap: 3rem;
   padding: 2rem 0;
+  align-items: start;
+}
+
+.movie-details > * {
+  min-width: 0;
 }
 
 .movie-poster {
@@ -321,13 +328,31 @@ p {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 2 / 3;
 }
 
 .movie-poster img {
   width: 100%;
-
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
+}
+
+.movie-poster-placeholder {
+  min-height: 0;
+}
+
+.movie-show-left-column {
+  width: 100%;
+}
+
+.movie-info,
+.overview-section p,
+.rating-card,
+.user-rating-card {
+  overflow-wrap: anywhere;
 }
 
 .movie-info h1 {
@@ -340,9 +365,19 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
+  row-gap: 0.75rem;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--border-color);
+}
+
+.movie-show-actions {
+  align-items: center;
+}
+
+.signin-warning-header,
+.signin-warning-actions {
+  flex-wrap: wrap;
 }
 
 .meta-item {
@@ -416,13 +451,22 @@ p {
     gap: 2rem;
   }
 
+  .movie-poster {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .movie-poster-placeholder {
+    min-height: 0;
+  }
+
   .page-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .page-header h1 {
-    font-size: 1.75rem;
+    font-size: 2.1rem;
   }
 
   .movie-info h1 {
@@ -452,9 +496,13 @@ p {
   .rating-average {
     font-size: 2.5rem;
   }
-}
-      flex: 1 1 100%;
-      max-width: 100%;
-    }
+
+  .movie-poster-placeholder {
+    min-height: 0;
   }
+
+  .movie-poster {
+    max-width: 240px;
+  }
+}
   
