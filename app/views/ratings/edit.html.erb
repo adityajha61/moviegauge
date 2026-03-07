@@ -1,0 +1,62 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-5">
+          <h1 class="mb-4 fw-bold">✏️ Update Your Rating</h1>
+
+          <div class="mb-4">
+            <p class="text-muted">
+              <strong><%= @movie.title %></strong>
+            </p>
+          </div>
+
+          <%= form_with(model: [@movie, @rating], local: true) do |form| %>
+            <% if @rating.errors.any? %>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>⚠️ Cannot Update Rating:</strong>
+                <ul class="mb-0 mt-2">
+                  <% @rating.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            <% end %>
+
+            <div class="mb-4">
+              <%= form.label :score, "Your Rating", class: "form-label fw-bold" %>
+              <div class="d-flex align-items-center gap-3">
+                <div class="rating-input">
+                  <%= form.number_field :score, min: 1, max: 10, class: "form-control form-control-lg", style: "max-width: 100px;", required: true %>
+                </div>
+                <span class="text-muted fw-bold">/10</span>
+              </div>
+              <small class="text-muted d-block mt-2">Peak between 1 (didn't like) and 10 (loved it!)</small>
+            </div>
+
+            <div class="d-flex gap-2">
+              <%= form.submit "Save Changes", class: "btn btn-success btn-lg" %>
+              <%= link_to "Cancel", @movie, class: "btn btn-secondary btn-lg" %>
+            </div>
+          <% end %>
+
+          <hr class="my-4">
+
+          <div class="alert alert-danger" role="alert">
+            <small>
+              <%= link_to "🗑️ Delete this rating", movie_rating_path(@movie, @rating), method: :delete, data: { confirm: "Are you sure?" }, class: "alert-link" %>
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rating-input input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+  }
+</style>

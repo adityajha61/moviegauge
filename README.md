@@ -1,28 +1,29 @@
-# Movie Ratings
+# 🎬 MovieGauge
 
-A simple Rails application for browsing movies and reading/posting user ratings.
+Discover, rate, and gauge the perfect movie. MovieGauge is a modern Rails application for browsing movies, rating them, and seeing what the community thinks.
 
-## Features
+## ✨ Features
 
-- **Browse Movies**: View a catalog of movies with detailed information
-- **User Authentication**: Sign up and log in with Devise
+- **Discover Movies**: Browse a stunning catalog of movies with beautiful imagery and detailed information
+- **User Authentication**: Secure sign up and login with Devise
 - **Rate Movies**: Submit and view ratings for movies (1-10 scale)
-- **Average Ratings**: See the average rating across all user reviews
-- **Movie Management**: Add, edit, and delete movies (admin functionality)
+- **Community Ratings**: See average ratings and what other users think
+- **Movie Management**: Add, edit, and delete movies from your collection
+- **Modern UI**: Beautiful, responsive design with smooth animations
 
-## Requirements
+## 🛠️ Requirements
 
 - Ruby 3.x
 - Rails 8.0+
 - PostgreSQL 12+
 - Node.js 18+
 
-## Setup
+## 🚀 Setup
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd movie_ratings
+   cd movieGauge
    ```
 
 2. **Install dependencies**
@@ -44,17 +45,17 @@ A simple Rails application for browsing movies and reading/posting user ratings.
 5. **Access the application**
    Open your browser and navigate to `http://localhost:3000`
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 app/
 ├── controllers/    # Request handlers for routes
 ├── models/        # ActiveRecord models (User, Movie, Rating)
-├── views/         # ERB templates for rendering pages
+├── views/         # ERB templates
 └── assets/        # Stylesheets and images
 
 config/
-├── routes.rb      # URL routing configuration
+├── routes.rb      # URL routing
 └── environment.rb # Environment setup
 
 db/
@@ -62,19 +63,19 @@ db/
 └── seeds.rb       # Sample data
 ```
 
-## Models
+## 📊 Models
 
 - **User**: User accounts with email authentication
 - **Movie**: Movie information (title, description, release date)
 - **Rating**: User ratings for movies (score 1-10)
 
-## Testing
+## 🧪 Testing
 
 Run the test suite:
 ```bash
 bin/rails test
 ```
 
-## License
+## 📄 License
 
 This project is open source and available under the MIT License.

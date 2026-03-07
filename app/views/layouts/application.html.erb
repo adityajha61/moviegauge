@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Movie Ratings" %></title>
+    <title><%= content_for(:title) || "MovieGauge - Rate & Discover Movies" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="MovieGauge - Discover movies, rate them, and see what others think">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -20,56 +21,280 @@
     <%# Bootstrap CSS %>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%# Heroicons icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/outline/index.min.css">
+
+    <%# Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets -->
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    
+    <style>
+      :root {
+        --primary-color: #8B5CF6;
+        --primary-dark: #7C3AED;
+        --primary-light: #A78BFA;
+        --secondary-color: #EC4899;
+        --accent-color: #F59E0B;
+        --success-color: #10B981;
+        --danger-color: #EF4444;
+        --dark-bg: #0F172A;
+        --light-bg: #F8FAFC;
+        --card-bg: #FFFFFF;
+        --text-primary: #0F172A;
+        --text-secondary: #64748B;
+        --border-color: #E2E8F0;
+      }
+      
+      * {
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      /* Navbar Styling */
+      .navbar {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 0;
+      }
+      
+      .navbar-brand {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: white !important;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .nav-link {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        margin: 0 0.5rem;
+      }
+      
+      .nav-link:hover {
+        color: white !important;
+      }
+      
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.8);
+        transition: width 0.3s ease;
+      }
+      
+      .nav-link:hover::after {
+        width: 100%;
+      }
+      
+      .btn-link {
+        background: none !important;
+        border: none !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        padding: 0 !important;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        margin: 0 0.5rem;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: inherit;
+      }
+      
+      .btn-link:hover {
+        color: white !important;
+      }
+      
+      .btn-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.8);
+        transition: width 0.3s ease;
+      }
+      
+      .btn-link:hover::after {
+        width: 100%;
+      }
+      
+      /* Buttons */
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.625rem 1.25rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #6D28D9 100%);
+      }
+      
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+      
+      .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-outline-primary:hover {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      }
+      
+      .btn-light {
+        background: white;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-light:hover {
+        background: var(--light-bg);
+        border-color: var(--primary-light);
+        transform: translateY(-2px);
+      }
+      
+      .btn-sm {
+        border-radius: 6px;
+        font-weight: 500;
+      }
+      
+      .btn-warning {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #D97706 100%);
+        border: none;
+        color: white;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      }
+      
+      /* Main Content */
+      main {
+        flex: 1;
+      }
+      
+      .container {
+        max-width: 1200px;
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+    </style>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
       <div class="container-fluid">
-        <%= link_to "🎬 Movie Ratings", root_path, class: "navbar-brand" %>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <%= link_to "🎬 MovieGauge", root_path, class: "navbar-brand" %>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <%= link_to "All Movies", movies_path, class: "nav-link" %>
+              <%= link_to "Discover", movies_path, class: "nav-link" %>
             </li>
-            <li class="nav-item">
-              <%= link_to "Add Movie", new_movie_path, class: "nav-link btn btn-primary text-white ms-2" %>
-            </li>
-            <li class="nav-item">
-              <% if user_signed_in? %>
-                <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "nav-link" %>
-              <% else %>
+            <% if user_signed_in? %>
+              <li class="nav-item">
+                <span class="nav-link text-white-50" style="cursor: default; padding: 0 0.5rem;"><%= current_user.email %></span>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Sign Out", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "nav-link" %>
+              </li>
+            <% else %>
+              <li class="nav-item">
                 <%= link_to "Sign In", new_user_session_path, class: "nav-link" %>
-              <% end %>
-            </li>
+              </li>
+            <% end %>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="mb-4">
+    <main>
       <% if notice %>
-        <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
-          <%= notice %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-success alert-dismissible fade show m-3" role="alert" style="background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%); border: none; color: white; font-weight: 500; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);">
+          ✨ <%= notice %>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
         </div>
       <% end %>
       <% if alert %>
-        <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
-          <%= alert %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-danger alert-dismissible fade show m-3" role="alert" style="background: linear-gradient(135deg, var(--danger-color) 0%, #DC2626 100%); border: none; color: white; font-weight: 500; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);">
+          ⚠️ <%= alert %>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
         </div>
       <% end %>
-    </div>
 
-    <%= yield %>
+      <%= yield %>
+    </main>
 
-    <%# Bootstrap JS %>
+    <footer style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); color: #94A3B8; padding: 3rem 0; margin-top: 5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <h5 style="color: white; font-weight: 800; margin-bottom: 1rem;">🎬 MovieGauge</h5>
+            <p style="font-size: 0.9rem; line-height: 1.6;">Discover, rate, and share your movie passions. Join our community of film enthusiasts.</p>
+          </div>
+          <div class="col-md-6 text-md-end" style="font-size: 0.9rem;">
+            <p style="margin-bottom: 0.5rem;">© 2026 MovieGauge. All rights reserved.</p>
+            <p style="color: #64748B;">Powered by Rails 8 & MovieDB</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <%# Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

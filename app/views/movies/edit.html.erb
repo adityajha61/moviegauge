@@ -1,40 +1,370 @@
-<div class="container mt-5">
+<div class="container mt-4 mb-5">
+  <div style="margin-bottom: 2rem;">
+    <%= link_to "← Back to Movie", @movie, class: "btn btn-light" %>
+  </div>
+
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h1 class="mb-4">Edit Movie</h1>
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+        <div class="card-body p-5">
+          <h1 class="mb-2 fw-bold" style="font-size: 2rem;">✏️ Edit Movie</h1>
+          <p style="color: #64748B; margin-bottom: 2rem;">Update movie details or search TMDB for new information</p>
 
-      <%= form_with(model: @movie, local: true) do |form| %>
-        <% if @movie.errors.any? %>
-          <div class="alert alert-danger">
-            <h4><%= pluralize(@movie.errors.count, "error") %> prohibited this movie from being saved:</h4>
-            <ul>
-              <% @movie.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
+          <div data-controller="movie-search">
+            <!-- Search Input -->
+            <div class="mb-4">
+              <label class="form-label fw-bold" style="font-size: 1rem; display: block; margin-bottom: 0.75rem;">Search TMDB (Optional)</label>
+              <input 
+                type="text" 
+                class="form-control form-control-lg search-input" 
+                placeholder="Search to update details from TMDB..."
+                data-movie-search-target="input"
+                data-action="input->movie-search#search keydown->movie-search#handleKeydown"
+                style="border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem;"
+              >
+              <div 
+                class="search-results d-none" 
+                data-movie-search-target="results"
+                style="border-radius: 8px; margin-top: 0.5rem;"
+              ></div>
+            </div>
+
+            <!-- Movie Preview -->
+            <div id="movie-preview" class="mt-4 mb-5"></div>
+
+            <!-- Form -->
+            <%= form_with(model: @movie, local: true, data: { "movie-search-target": "form" }) do |form| %>
+              <% if @movie.errors.any? %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); border: 1px solid #FECACA; color: #991B1B; font-weight: 500; border-radius: 8px;">
+                  <strong>⚠️ Fix these errors:</strong>
+                  <ul class="mb-0 mt-2">
+                    <% @movie.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                  <button type="button" class="btn-close" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"%23991B1B\" d=\"M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z\"/></svg>');" data-bs-dismiss="alert"></button>
+                </div>
               <% end %>
-            </ul>
+
+              <!-- Hidden fields for TMDB data -->
+              <%= form.hidden_field :tmdb_id, id: "movie_tmdb_id" %>
+              <%= form.hidden_field :poster_path, id: "movie_poster_path" %>
+              <%= form.hidden_field :backdrop_path, id: "movie_backdrop_path" %>
+              <%= form.hidden_field :vote_average, id: "movie_vote_average" %>
+              <%= form.hidden_field :popularity, id: "movie_popularity" %>
+
+              <!-- Title -->
+              <div class="mb-4">
+                <%= form.label :title, "Movie Title", class: "form-label fw-bold" %>
+                <%= form.text_field :title, class: "form-control form-control-lg #{'is-invalid' if @movie.errors[:title].any?}", id: "movie_title", style: "border-radius: 8px; border: 1px solid #E2E8F0;" %>
+                <% if @movie.errors[:title].any? %>
+                  <div class="invalid-feedback d-block" style="color: #EF4444;">
+                    <%= @movie.errors[:title].first %>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Description -->
+              <div class="mb-4">
+                <%= form.label :description, "Description", class: "form-label fw-bold" %>
+                <%= form.text_area :description, rows: 6, class: "form-control #{'is-invalid' if @movie.errors[:description].any?}", id: "movie_description", style: "border-radius: 8px; border: 1px solid #E2E8F0;" %>
+                <% if @movie.errors[:description].any? %>
+                  <div class="invalid-feedback d-block" style="color: #EF4444;">
+                    <%= @movie.errors[:description].first %>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Release Date -->
+              <div class="mb-5">
+                <%= form.label :release_date, "Release Date", class: "form-label fw-bold" %>
+                <%= form.date_field :release_date, class: "form-control form-control-lg #{'is-invalid' if @movie.errors[:release_date].any?}", id: "movie_release_date", style: "border-radius: 8px; border: 1px solid #E2E8F0;" %>
+                <% if @movie.errors[:release_date].any? %>
+                  <div class="invalid-feedback d-block" style="color: #EF4444;">
+                    <%= @movie.errors[:release_date].first %>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Buttons -->
+              <div class="d-flex gap-3 flex-wrap">
+                <%= form.submit "Save Changes", class: "btn btn-primary btn-lg", style: "padding: 0.75rem 2rem;" %>
+                <%= link_to "Cancel", @movie, class: "btn btn-light btn-lg", style: "padding: 0.75rem 2rem;" %>
+              </div>
+            <% end %>
           </div>
-        <% end %>
-
-        <div class="mb-3">
-          <%= form.label :title, class: "form-label" %>
-          <%= form.text_field :title, class: "form-control" %>
         </div>
-
-        <div class="mb-3">
-          <%= form.label :description, class: "form-label" %>
-          <%= form.text_area :description, rows: 5, class: "form-control" %>
-        </div>
-
-        <div class="mb-3">
-          <%= form.label :release_date, class: "form-label" %>
-          <%= form.date_field :release_date, class: "form-control" %>
-        </div>
-
-        <div class="d-flex gap-2">
-          <%= form.submit "Update Movie", class: "btn btn-primary" %>
-          <%= link_to "Cancel", @movie, class: "btn btn-secondary" %>
-        </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+  .search-input {
+    position: relative;
+  }
+
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #F1F5F9;
+    transition: background-color 0.2s;
+  }
+
+  .search-result-item:last-child {
+    border-bottom: none;
+  }
+
+  .search-result-item:hover,
+  .search-result-item.selected {
+    background-color: #F8FAFC;
+  }
+
+  .search-result-poster {
+    flex-shrink: 0;
+  }
+
+  .search-result-poster img {
+    width: 50px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .no-poster {
+    width: 50px;
+    height: 75px;
+    background-color: #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 24px;
+    color: #94A3B8;
+  }
+
+  .search-result-info {
+    flex-grow: 1;
+  }
+
+  .search-result-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #0F172A;
+    margin-bottom: 4px;
+  }
+
+  .search-result-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #64748B;
+  }
+
+  .search-no-results {
+    padding: 24px;
+    text-align: center;
+    color: #94A3B8;
+    font-weight: 500;
+  }
+
+  .movie-preview-card {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+  }
+
+  .preview-content {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .preview-poster img {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+  }
+
+  .no-poster-large {
+    width: 120px;
+    height: 180px;
+    background-color: #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 48px;
+    color: #94A3B8;
+    flex-shrink: 0;
+  }
+
+  .preview-info {
+    flex-grow: 1;
+  }
+
+  .preview-info h5 {
+    color: #0F172A;
+    margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  .preview-description {
+    line-height: 1.6;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    color: #64748B;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .preview-content {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .preview-info {
+      text-align: center;
+    }
+  }
+</style>
+
+  .search-result-item:hover,
+  .search-result-item.selected {
+    background-color: #f8f9fa;
+  }
+
+  .search-result-poster {
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .search-result-poster img {
+    width: 50px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .no-poster {
+    width: 50px;
+    height: 75px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 24px;
+  }
+
+  .search-result-info {
+    flex-grow: 1;
+  }
+
+  .search-result-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  .search-result-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #6c757d;
+  }
+
+  .search-no-results {
+    padding: 16px;
+    text-align: center;
+    color: #6c757d;
+  }
+
+  .movie-preview-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+  }
+
+  .preview-content {
+    display: flex;
+    gap: 20px;
+  }
+
+  .preview-poster img {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .no-poster-large {
+    width: 120px;
+    height: 180px;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 48px;
+  }
+
+  .preview-info {
+    flex-grow: 1;
+  }
+
+  .preview-info h5 {
+    color: #333;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .preview-description {
+    line-height: 1.6;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .search-results:not(.d-none) {
+    display: block !important;
+  }
+
+  .mb-4 {
+    position: relative;
+  }
+</style>
