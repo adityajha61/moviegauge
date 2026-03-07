@@ -36,6 +36,13 @@ class MoviesController < ApplicationController
   def create
     @movie = Movie.new(movie_params)
     if @movie.save
+      # Create optional rating if score is provided
+      if params[:movie][:rating_score].present?
+        rating_score = params[:movie][:rating_score].to_i
+        if rating_score.between?(1, 10)
+          @movie.ratings.create(user: current_user, score: rating_score)
+        end
+      end
       redirect_to @movie, notice: "✅ Movie added to your collection!"
     else
       render :new

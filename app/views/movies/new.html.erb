@@ -12,7 +12,7 @@
 
           <div data-controller="movie-search">
             <!-- Search Input -->
-            <div class="mb-4">
+            <div class="mb-4" style="position: relative;">
               <label class="form-label fw-bold" style="font-size: 1rem; display: block; margin-bottom: 0.75rem;">Search TMDB</label>
               <input 
                 type="text" 
@@ -20,12 +20,12 @@
                 placeholder="Start typing a movie name (e.g., The Matrix)..."
                 data-movie-search-target="input"
                 data-action="input->movie-search#search keydown->movie-search#handleKeydown"
-                style="border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem;"
+                style="border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem; position: relative; z-index: 10;"
               >
               <div 
                 class="search-results d-none" 
                 data-movie-search-target="results"
-                style="border-radius: 8px; margin-top: 0.5rem;"
+                style="position: absolute; top: 100%; left: 0; right: 0; border-radius: 0 0 8px 8px; margin-top: 0; z-index: 1001;"
               ></div>
             </div>
 
@@ -33,7 +33,7 @@
             <div id="movie-preview" class="mt-4 mb-5"></div>
 
             <!-- Form -->
-            <%= form_with(model: @movie, local: true, data: { "movie-search-target": "form" }) do |form| %>
+            <%= form_with(model: @movie, local: false, data: { "movie-search-target": "form", turbo: false }) do |form| %>
               <% if @movie.errors.any? %>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); border: 1px solid #FECACA; color: #991B1B; font-weight: 500; border-radius: 8px;">
                   <strong>⚠️ Fix these errors:</strong>
@@ -76,7 +76,7 @@
               </div>
 
               <!-- Release Date -->
-              <div class="mb-5">
+              <div class="mb-4">
                 <%= form.label :release_date, "Release Date", class: "form-label fw-bold" %>
                 <%= form.date_field :release_date, class: "form-control form-control-lg #{'is-invalid' if @movie.errors[:release_date].any?}", id: "movie_release_date", style: "border-radius: 8px; border: 1px solid #E2E8F0;" %>
                 <% if @movie.errors[:release_date].any? %>
@@ -86,10 +86,29 @@
                 <% end %>
               </div>
 
+              <!-- Rating (Optional) -->
+              <div class="mb-5">
+                <label class="form-label fw-bold">Your Rating (Optional)</label>
+                <div class="d-flex align-items-center gap-3">
+                  <input 
+                    type="range" 
+                    id="rating_slider_js" 
+                    name="movie[rating_score]" 
+                    min="1" 
+                    max="10" 
+                    value="5"
+                    class="form-range"
+                    style="width: 200px; cursor: pointer;"
+                  >
+                  <span id="rating_display_js" style="font-weight: bold; color: #8B5CF6; font-size: 1.1rem; min-width: 40px;">5/10</span>
+                </div>
+                <small class="text-muted" style="display: block; margin-top: 0.5rem;">Slide to rate the movie from 1 to 10, or leave at default</small>
+              </div>
+
               <!-- Buttons -->
               <div class="d-flex gap-3 flex-wrap">
-                <%= form.submit "Save Movie", class: "btn btn-primary btn-lg", style: "padding: 0.75rem 2, 25rem;" %>
-                <%= link_to "Cancel", movies_path, class: "btn btn-light btn-lg", style: "padding: 0.75rem 2rem;" %>
+                <%= form.submit "Save Movie", class: "btn btn-primary btn-lg fw-bold", style: "padding: 0.875rem 2.5rem; border-radius: 8px; background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);" %>
+                <%= link_to "Cancel", movies_path, class: "btn btn-light btn-lg", style: "padding: 0.875rem 2.5rem; border-radius: 8px;" %>
               </div>
             <% end %>
           </div>
@@ -98,6 +117,38 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  console.log('Script loaded - initializing rating slider');
+  
+  // Wait for DOM to be ready
+  function initRatingSlider() {
+    console.log('initRatingSlider called');
+    const ratingSlider = document.getElementById('rating_slider_js');
+    const ratingDisplay = document.getElementById('rating_display_js');
+    
+    console.log('Rating Slider:', ratingSlider);
+    console.log('Rating Display:', ratingDisplay);
+    
+    if (ratingSlider && ratingDisplay) {
+      // Update display when slider is moved
+      ratingSlider.addEventListener('input', function(e) {
+        console.log('Slider moved to:', e.target.value);
+        ratingDisplay.textContent = e.target.value + '/10';
+      });
+      console.log('Rating slider event listener attached');
+    } else {
+      console.warn('Rating slider or display element not found');
+    }
+  }
+  
+  // Try to initialize as soon as possible
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRatingSlider);
+  } else {
+    initRatingSlider();
+  }
+</script>
 
 <style>
   .search-input {

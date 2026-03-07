@@ -1,0 +1,70 @@
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); padding: 3rem 1.5rem; text-align: center; color: white;">
+            <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">🎬 MovieGauge</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 0;">Let's find your next favorite film</p>
+          </div>
+
+          <!-- Form -->
+          <div class="card-body p-5">
+            <%= render "users/shared/error_messages", resource: resource %>
+
+            <%= form_with(model: resource, local: true, url: registration_path(resource_name)) do |form| %>
+              <!-- Email -->
+              <div class="mb-4">
+                <%= form.label :email, "Email Address", class: "form-label fw-bold" %>
+                <%= form.email_field :email, autofocus: true, autocomplete: "email", class: "form-control form-control-lg", placeholder: "you@example.com", style: "border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem;" %>
+              </div>
+
+              <!-- Password -->
+              <div class="mb-4">
+                <%= form.label :password, "Password", class: "form-label fw-bold" %>
+                <% if @minimum_password_length %>
+                  <small style="display: block; color: #64748B; margin-bottom: 0.5rem;">
+                    Minimum <%= @minimum_password_length %> characters required
+                  </small>
+                <% end %>
+                <%= form.password_field :password, autocomplete: "new-password", class: "form-control form-control-lg", placeholder: "••••••••", style: "border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem;" %>
+              </div>
+
+              <!-- Password Confirmation -->
+              <div class="mb-4">
+                <%= form.label :password_confirmation, "Confirm Password", class: "form-label fw-bold" %>
+                <%= form.password_field :password_confirmation, autocomplete: "new-password", class: "form-control form-control-lg", placeholder: "••••••••", style: "border-radius: 8px; border: 1px solid #E2E8F0; padding: 0.875rem 1.25rem;" %>
+              </div>
+
+              <!-- Sign Up Button -->
+              <div class="d-grid gap-2 mb-4">
+                <%= form.submit "Create My Account", class: "btn btn-primary btn-lg fw-bold", style: "padding: 0.875rem; border-radius: 8px; background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); border: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);" %>
+              </div>
+
+              <!-- Divider -->
+              <div style="display: flex; align-items: center; margin: 2rem 0; gap: 1rem;">
+                <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+                <span style="color: #94A3B8; font-size: 0.9rem;">or</span>
+                <div style="flex: 1; height: 1px; background: #E2E8F0;"></div>
+              </div>
+
+              <!-- Links -->
+              <div class="text-center" style="font-size: 0.95rem; color: #64748B;">
+                <p style="margin-bottom: 0;">
+                  Already have an account?
+                  <%= link_to "Sign in here", new_user_session_path, style: "color: #8B5CF6; font-weight: 600; text-decoration: none;" %>
+                </p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Back Link -->
+        <div style="text-align: center; margin-top: 2rem;">
+          <%= link_to "← Back to MovieGauge", root_path, style: "color: #64748B; text-decoration: none; font-weight: 500; transition: color 0.3s;" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
