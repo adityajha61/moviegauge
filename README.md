@@ -45,6 +45,56 @@ Discover, rate, and gauge the perfect movie. MovieGauge is a modern Rails applic
 5. **Access the application**
    Open your browser and navigate to `http://localhost:3000`
 
+## Email Confirmation Setup (Devise + Brevo)
+
+This app uses Devise email confirmation (`:confirmable`). New users must confirm their email before they can log in.
+
+### Local development
+
+1. Install dependencies after pulling latest changes:
+   ```bash
+   bundle install
+   ```
+2. Copy environment template:
+   ```bash
+   cp .env.example .env
+   ```
+3. Run migrations:
+   ```bash
+   bin/rails db:migrate
+   ```
+4. Start app:
+   ```bash
+   bin/dev
+   ```
+5. By default in development, emails open in browser via Letter Opener Web:
+   - Inbox UI: `http://localhost:3000/letter_opener`
+
+To send real emails from local using Brevo, set SMTP values in `.env` (`SMTP_ADDRESS`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`).
+
+### Production (Brevo SMTP)
+
+Set these environment variables in your deployment platform:
+
+- `APP_HOST` (for example, `moviegauge.example.com`)
+- `APP_PROTOCOL=https`
+- `MAILER_FROM` (for example, `noreply@yourdomain.com`)
+- `MAILER_DOMAIN` (your email/domain)
+- `SMTP_ADDRESS=smtp-relay.brevo.com`
+- `SMTP_PORT=587`
+- `SMTP_USERNAME` (Brevo SMTP login)
+- `SMTP_PASSWORD` (Brevo SMTP key)
+- `SMTP_AUTH=login`
+- `SMTP_ENABLE_STARTTLS_AUTO=true`
+
+In Brevo dashboard:
+
+1. Verify sender email or domain.
+2. Create an SMTP key.
+3. Use that SMTP login/key in the app environment variables.
+
+After deploy, sign up with a new account and confirm that the confirmation email arrives and the link activates the account.
+
 ## 📁 Project Structure
 
 ```

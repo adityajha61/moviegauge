@@ -89,20 +89,20 @@
               <!-- Rating (Optional) -->
               <div class="mb-5">
                 <label class="form-label fw-bold">Your Rating (Optional)</label>
+                <input type="hidden" id="rating_score_hidden_js" name="movie[rating_score]" value="">
                 <div class="d-flex align-items-center gap-3">
                   <input 
                     type="range" 
                     id="rating_slider_js" 
-                    name="movie[rating_score]" 
                     min="1" 
                     max="10" 
                     value="5"
                     class="form-range"
                     style="width: 200px; cursor: pointer;"
                   >
-                  <span id="rating_display_js" style="font-weight: bold; color: #8B5CF6; font-size: 1.1rem; min-width: 40px;">5/10</span>
+                  <span id="rating_display_js" style="font-weight: bold; color: #8B5CF6; font-size: 1.1rem; min-width: 140px;">No rating selected</span>
                 </div>
-                <small class="text-muted" style="display: block; margin-top: 0.5rem;">Slide to rate the movie from 1 to 10, or leave at default</small>
+                <small class="text-muted" style="display: block; margin-top: 0.5rem;">Move the slider to add a rating from 1 to 10. Leave it untouched to skip rating.</small>
               </div>
 
               <!-- Buttons -->
@@ -126,23 +126,33 @@
     console.log('initRatingSlider called');
     const ratingSlider = document.getElementById('rating_slider_js');
     const ratingDisplay = document.getElementById('rating_display_js');
+    const ratingHiddenField = document.getElementById('rating_score_hidden_js');
     
     console.log('Rating Slider:', ratingSlider);
     console.log('Rating Display:', ratingDisplay);
     
-    if (ratingSlider && ratingDisplay) {
+    if (ratingSlider && ratingDisplay && ratingHiddenField) {
+      // Avoid attaching duplicate listeners when the page is revisited.
+      if (ratingSlider.dataset.bound === 'true') {
+        return;
+      }
+
       // Update display when slider is moved
       ratingSlider.addEventListener('input', function(e) {
         console.log('Slider moved to:', e.target.value);
         ratingDisplay.textContent = e.target.value + '/10';
+        ratingHiddenField.value = e.target.value;
       });
+      ratingSlider.dataset.bound = 'true';
       console.log('Rating slider event listener attached');
     } else {
-      console.warn('Rating slider or display element not found');
+      console.warn('Rating slider, display, or hidden field not found');
     }
   }
   
-  // Try to initialize as soon as possible
+  document.addEventListener('turbo:load', initRatingSlider);
+
+  // Fallback for non-Turbo page loads.
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initRatingSlider);
   } else {
