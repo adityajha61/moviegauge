@@ -35,18 +35,23 @@ class MoviesController < ApplicationController
 
   def create
     @movie = Movie.new(movie_params)
-    if @movie.save
-      # Create optional rating if score is provided
-      if params[:movie][:rating_score].present?
-        rating_score = params[:movie][:rating_score].to_i
-        if rating_score.between?(1, 10)
-          @movie.ratings.create(user: current_user, score: rating_score)
-        end
+
+    if params.dig(:movie, :rating_score).present?
+      rating_score = parse_rating_score(params[:movie][:rating_score])
+
+      if rating_score.nil?
+        @movie.errors.add(:base, "Rating must be between 1 and 10")
+        render :new, status: :unprocessable_entity
+        return
       end
-      # Keep user on movie detail page so they can immediately review, edit, or rate.
+
+      @movie.ratings.build(user: current_user, score: rating_score)
+    end
+
+    if @movie.save
       redirect_to movie_path(@movie), notice: "✅ Movie added to your collection!"
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -74,5 +79,12 @@ class MoviesController < ApplicationController
 
   def movie_params
     params.require(:movie).permit(:title, :description, :release_date, :tmdb_id, :poster_path, :backdrop_path, :vote_average, :popularity)
+  end
+
+  def parse_rating_score(value)
+    return if value.blank?
+
+    rating_score = Integer(value, exception: false)
+    rating_score if rating_score.present? && rating_score.between?(1, 10)
   end
 end
