@@ -66,22 +66,21 @@ Rails.application.configure do
     raise "SMTP_USERNAME and SMTP_PASSWORD must be configured together"
   end
 
-  if smtp_username.present?
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.raise_delivery_errors = true
-    config.action_mailer.smtp_settings = {
-      address: ENV.fetch("SMTP_ADDRESS", "smtp-relay.brevo.com"),
-      port: ENV.fetch("SMTP_PORT", 587).to_i,
-      user_name: smtp_username,
-      password: smtp_password,
-      domain: ENV.fetch("MAILER_DOMAIN", ENV.fetch("APP_HOST", "example.com")),
-      authentication: ENV.fetch("SMTP_AUTH", "login").to_sym,
-      enable_starttls_auto: ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", "true") == "true"
-    }
-  else
-    config.action_mailer.delivery_method = :test
-    config.action_mailer.raise_delivery_errors = false
+  unless smtp_username.present?
+    raise "SMTP_USERNAME and SMTP_PASSWORD are required in production"
   end
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("SMTP_ADDRESS", "smtp-relay.brevo.com"),
+    port: ENV.fetch("SMTP_PORT", 587).to_i,
+    user_name: smtp_username,
+    password: smtp_password,
+    domain: ENV.fetch("MAILER_DOMAIN", ENV.fetch("APP_HOST", "example.com")),
+    authentication: ENV.fetch("SMTP_AUTH", "login").to_sym,
+    enable_starttls_auto: ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", "true") == "true"
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation for a given locale is missing).
