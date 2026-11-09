@@ -2,16 +2,30 @@
 # are invoked here are part of Puma's configuration DSL. For more information
 # about methods provided by the DSL, see https://puma.io/puma/Puma/DSL.html.
 #
-# Puma starts a configurable number of processes, each of which serves requests
-# in threads. You can control the number of workers using ENV["WEB_CONCURRENCY"];
-# the default is already 1.
+# Puma starts a configurable number of processes on the same machine. Each
+# process serves each request in a thread from an internal thread pool.
+#
+# You can control the number of workers using ENV["WEB_CONCURRENCY"]. The
+# default is already 1.
+#
+# The ideal number of threads per worker depends both on how much time the
+# application spends waiting for IO operations and on how much you wish to
+# prioritize throughput over latency.
+#
+# As a rule of thumb, increasing the number of threads will increase how much
+# traffic a given process can handle (throughput), but due to CRuby's
+# Global VM Lock (GVL) it has diminishing returns and will degrade the response
+# time (latency) of the application.
+#
+# The default is set to 3 threads as it's deemed a decent compromise for the
+# average application.
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
 # Specifies the port that Puma will listen on to receive requests; default is 3000.
 port ENV.fetch("PORT", 3000)
 
-# Allow Puma to be restarted by `bin/rails restart` command.
+# Allow a Puma restart by `bin/rails restart` command.
 plugin :tmp_restart
 
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
