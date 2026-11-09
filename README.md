@@ -81,7 +81,7 @@ Set these environment variables in your deployment platform:
 - `MAILER_FROM` (for example, `noreply@yourdomain.com`)
 - `MAILER_DOMAIN` (your email/domain)
 - `SMTP_ADDRESS=smtp-relay.brevo.com`
-- `SMTP_PORT=587`
+- `SMTP_PORT=2525`
 - `SMTP_USERNAME` (Brevo SMTP login)
 - `SMTP_PASSWORD` (Brevo SMTP key)
 - `SMTP_AUTH=login`
@@ -93,7 +93,7 @@ In Brevo dashboard:
 2. Create an SMTP key.
 3. Use that SMTP login/key in the app environment variables.
 
-After deploy, sign up with a new account and confirm that the confirmation email arrives and the link activates the account.
+Use port 2525 for Render deployments. After deploy, sign up with a new account and confirm that the confirmation email arrives and the link activates the account.
 
 ## 📁 Project Structure
 

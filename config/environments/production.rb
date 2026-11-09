@@ -74,7 +74,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
     address: ENV.fetch("SMTP_ADDRESS", "smtp-relay.brevo.com"),
-    port: ENV.fetch("SMTP_PORT", 587).to_i,
+    port: ENV.fetch("SMTP_PORT", 2525).to_i,
     user_name: smtp_username,
     password: smtp_password,
     domain: ENV.fetch("MAILER_DOMAIN", ENV.fetch("APP_HOST", "example.com")),
