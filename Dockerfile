@@ -47,7 +47,11 @@ RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompile assets at build time without requiring runtime secrets.
 # Falls back to a dummy DATABASE_URL if build-time env vars are unavailable.
-RUN SECRET_KEY_BASE_DUMMY=1 DATABASE_URL=${DATABASE_URL:-postgresql://dummy:dummy@127.0.0.1:5432/dummy} ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 \
+    DATABASE_URL=${DATABASE_URL:-postgresql://dummy:dummy@127.0.0.1:5432/dummy} \
+    SMTP_USERNAME=build-placeholder \
+    SMTP_PASSWORD=build-placeholder \
+    ./bin/rails assets:precompile
 
 
 
